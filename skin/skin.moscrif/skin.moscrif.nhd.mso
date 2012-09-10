@@ -1,0 +1,307 @@
+// 360x640
+{
+	application: {
+		background: 0xffe01f2f;
+	},
+	form: {
+		background: "background.png"
+	},
+	label: {
+	},
+	button: {
+		negative: {
+			nine: "button-negative.png",
+			font: { name: "freesans", style: #bold, color: 0xFFFFFFFF, size: 20 /*, fakeBold: true, underline: true, strikeThru: false */ },
+		},
+		positive: {
+			nine: "button-negative.png",
+			font: { name: "freesans", style: #bold, color: 0xFF000000, size: 20 /*, fakeBold: true, underline: true, strikeThru: false */ },
+		},
+		normal: {
+			nine: "button.png",
+			font: { name: "freesans", style: #bold, color: 0xFFFFFFFF, size: 20 /*, fakeBold: true, underline: true, strikeThru: false */ },
+		}
+	},
+	dialog : {
+		background: 0xff000000,
+		radiusX: 5, radiusY: 5,
+		font: { name: "freesans", style: #bold, color: 0xeeFFFFFF, size: 20 /*, fakeBold: true, underline: true, strikeThru: false */ },
+		buttons: {
+			height: 52
+		},
+		cancel: "overlay-cancel.png"
+	},
+	menu: {
+	},
+	menuItem: {
+		height: 50,
+		normal: {
+			background: {
+				points: { start: {x: 0, y: 0}, end: {x: 0, y: 50} },
+				colors: [0xFFF6F6F7, 0xFFD9DCE0],
+				pos: [0.0, 1.0],
+				topBorder: 0xFFFBFBFC,
+				bottomBorder: 0xFF7B7D7F
+			},
+			font: { name: "freesans", style: #bold, size: 20, color: 0xFF000000 },
+		},
+		pressed: {
+			background: {
+				points: { start: {x: 0, y: 0}, end: {x: 0, y: 70} },
+				colors: [0xFFFA22508, 0xFFDD2E0B, 0xFFB80110],
+				pos: [0.0, 0.14, 1.0],
+				topBorder: 0xFFEF917B,
+				bottomBorder: 0xFF4B0007
+			},
+			font: { name: "freesans", style: #bold, size: 20, color: 0xFFFFFFFF },
+		},
+	},
+	keyboard: {
+		height: 225,
+		background: {
+			points: { start: {x: 0, y: 0}, end: {x: 0, y: 320} },
+			colors: [0xFFF515154, 0xFF252728],
+			pos: [0.0, 1.0],
+		},
+		font: { name: "freesans", style: #bold, size: 30, color: 0xFFFFFFFF },
+	},
+	keyboardButton: {
+		height: 55, width: 36,
+		normal: {
+			nine: "kb-key.png",
+			font: { name: "freesans", style: #bold, color: 0xFF000000, size: 28 /*, fakeBold: true, underline: true, strikeThru: false */ },
+		},
+		control: {
+			nine: "kb-ctrl.png",
+			font: { name: "freesans", style: #bold, color: 0xFF000000, size: 28 /*, fakeBold: true, underline: true, strikeThru: false */ },
+		},
+		enter: {
+			nine: "kb-enter.png",
+			font: { name: "freesans", style: #bold, color: 0xFFFFFFFF, size: 28 /*, fakeBold: true, underline: true, strikeThru: false */ },
+		}
+	},
+	numericKeyboard: {
+		height: 240,
+	},
+	numericKeyboardButton: {
+		height: 60,
+		normal: {
+			background: {
+				points: { start: {x: 0, y: 0}, end: {x: 0, y: 60} },
+				colors: [0xFFE3E5E7, 0xFFC1C5CA],
+				pos: [0.0, 1.0],
+				topBorder: 0xFFF3F4F5, bottomBorder: 0xFF76787B, leftBorder: 0xFFDADCDF, rightBorder: 0xFF9A9C9E
+			},
+			font: { name: "freesans", style: #bold, size: 30, color: 0xFF000000 },
+		},
+		icons: { back: "kb-back2.png" }
+	},
+	titleBar: {
+		height: 55,
+		background: {
+			points: { start: {x: 0, y: 0}, end: {x: 0, y: 55} },
+			colors: [0xFFE1330B, 0xFFB80110],
+			pos: [0.0, 1.0],
+			topBorder: 0xFFEF917B,
+			bottomBorder: 0xFF4B0007
+		},
+		foreground: 0xffffffff,
+		font: { name: "aldo", style: #bold, size: 35 /*, fakeBold: true, underline: true, strikeThru: false */ },
+		button: {
+			width: 42, height: 42,
+			back: "titleBarButton-back.png",
+			normal: "",
+			next: "titleBarButton-next.png",
+			font: { name: "freesans", style: #bold, size: 18, color: 0xFFFFFFFF },
+		}
+	},
+	toolBar: {
+		height: 70,
+		background: {
+			points: { start: {x: 0, y: 0}, end: {x: 0, y: 70} },
+			colors: [0xFF272727, 0xFF020202],
+			pos: [0.0, 1.0],
+			topBorder: 0xFF676767,
+			bottomBorder: 0xFF000000
+		}
+	},
+	toolBarButton: {
+		font: { name: "freesans", style: #normal, size: 18, color: 0xFFFFFFFF },
+		highlight: {
+			points: { start: {x: 0, y: 0}, end: {x: 0, y: 70} },
+			colors: [0xFFE75E3E, 0xFFB00110],
+			pos: [0.0, 1.0],
+			topBorder: 0xFFE0330B,
+			bottomBorder: 0xFF56131A
+		},
+		pressed: {
+			points: { start: {x: 0, y: 0}, end: {x: 0, y: 70} },
+			colors: [0xFF686868, 0xFF434343],
+			pos: [0.0, 1.0],
+			topBorder: 0xFFEA8A8A8,
+			bottomBorder: 0xFF434343
+		}
+	},
+	tabBar: {
+		height: 70,
+		background: {
+			color: 0xFF272727,
+		}
+	},
+	tabBarItem: {
+		normal: {
+			points: { start: {x: 0, y: 0}, end: {x: 0, y: 70} },
+			colors: [0xFFE3E5E7, 0xFFB3B7BD],
+			pos: [0.0, 1.0],
+			topBorder: 0xFFF3F4F5,
+			bottomBorder: 0xFF66686B,
+			font: { name: "freesans", style: #bold, size: 18, color: 0xFF000000 },
+		},
+		selected: {
+			points: { start: {x: 0, y: 0}, end: {x: 0, y: 70} },
+			colors: [0xFF515154, 0xFF272727],
+			pos: [0.0, 1.0],
+			topBorder: 0xFF8B8B8D,
+			bottomBorder: 0xFF272727,
+			font: { name: "freesans", style: #bold, size: 18, color: 0xFFFFFFFF },
+		}
+	},
+	listViewItem: {
+		height: 60, margin: 11,
+		normal: {
+			background: {
+				points: { start: {x: 0, y: 0}, end: {x: 0, y: 60} },
+				colors: [0xFFF6F6F7, 0xFFD9DCE0],
+				pos: [0.0, 1.0],
+				topBorder: 0xFFFBFBFC,
+				bottomBorder: 0xFF7B7D7F
+			},
+			font: { name: "freesans", style: #bold, size: 20, color: 0xFF000000 },
+		},
+		alternate: {
+			background: {
+				points: { start: {x: 0, y: 0}, end: {x: 0, y: 60} },
+				colors: [0xFF515154, 0xFF252729],
+				pos: [0.0, 1.0],
+				topBorder: 0xFF8B8B8D,
+				bottomBorder: 0xFF0D0E0E
+			},
+			font: { name: "freesans", style: #normal, size: 20, color: 0xFFFFFFFF },
+		},
+		pressed: {
+			background: {
+				points: { start: {x: 0, y: 0}, end: {x: 0, y: 60} },
+				colors: [0xFFFA22508, 0xFFDD2E0B, 0xFFB80110],
+				pos: [0.0, 0.14, 1.0],
+				topBorder: 0xFFEF917B,
+				bottomBorder: 0xFF4B0007
+			},
+			font: { name: "freesans", style: #bold, size: 20, color: 0xFFFFFFFF },
+		},
+		icon: {
+			width: 60, height: 60,
+			separator: "listViewItem-separator.png",
+			detail: "listViewItem-next.png",
+			background: {
+				color: 0xFFFF7F7F7,
+				topBorder: 0xFFFBFBFC,
+				bottomBorder: 0xFF7B7D7F
+			}
+		},
+		label: {
+			width: 120
+		},
+		hint: {
+			font: { name: "freesans", style: #normal, size: 20, color: 0xFFAAAAAA },
+		},
+		editor: {
+			font: { name: "freesans", style: #normal, size: 20, color: 0xFF000000 },
+		}
+	},
+	tileViewItem: {
+		width: 120, height: 129,
+		normal: {
+			background: {
+				points: { start: {x: 0, y: 0}, end: {x: 0, y: 130} },
+				colors: [0xFFF515154, 0xFF232526],
+				pos: [0.0, 1.0],
+				topBorder: 0xFF8B8B8D,
+				bottomBorder: 0xFF1F2020,
+				leftBorder: 0xFF595A5B,
+				rightBorder: 0xFF222224,
+			},
+			font: { name: "freesans", style: #bold, size: 16, color: 0xFFFFFFFF },
+		},
+		alternate: {
+			background: {
+				points: { start: {x: 0, y: 0}, end: {x: 0, y: 130} },
+				colors: [0xFFF6F6F8, 0xFFD9DCE1],
+				pos: [0.0, 1.0],
+				topBorder: 0xFFFBFBFD,
+				bottomBorder: 0xFF848589,
+				leftBorder: 0xFFF5F5F7,
+				rightBorder: 0xFFA9AAAC,
+			},
+			font: { name: "freesans", style: #bold, size: 16, color: 0xFF000000 },
+		},
+		pressed: {
+			background: {
+				points: { start: {x: 0, y: 0}, end: {x: 0, y: 130} },
+				colors: [0xFF232526, 0xFFF515154],
+				pos: [0.0, 1.0],
+				topBorder: 0xFF8B8B8D,
+				bottomBorder: 0xFF1F2020,
+				leftBorder: 0xFF595A5B,
+				rightBorder: 0xFF222224,
+			},
+			font: { name: "freesans", style: #bold, size: 16, color: 0xFFFFFFFF },
+		},
+	},
+	calendarView: {
+		title: {
+			height: 51,
+			font: { name: "freesans", style: #bold, size: 18, color: 0xFFFFFFFF },
+			points: { start: {x: 0, y: 0}, end: {x: 0, y: 51} },
+			colors: [0xFF515154, 0xFF262729],
+			pos: [0.0, 1.0],
+			topBorder: 0xFF8B8B8D,
+			bottomBorder: 0xFF0D0E0E,
+		},
+		day: {
+			width: 68, height: 50,
+			disabled: { name: "freesans", style: #bold, size: 22, color: 0xFF909090 },
+			today: { name: "freesans", style: #bold, size: 22, color: 0xFFFFFFF, underline: true },
+			normal: {
+				font: { name: "freesans", style: #bold, size: 22, color: 0xFF000000 },
+				points: { start: {x: 0, y: 0}, end: {x: 0, y: 70} },
+				colors: [0xFFF7F7F7, 0xFFE7E9EB],
+				pos: [0.0, 1.0],
+				topBorder: 0xFFFCFCFC,
+				bottomBorder: 0xFF838486,
+				leftBorder: 0xFFF4F4F6,
+				rightBorder: 0xFFAFAFB1
+			},
+			weekend: {
+				font: { name: "freesans", style: #bold, size: 22, color: 0xFF000000 },
+				points: { start: {x: 0, y: 0}, end: {x: 0, y: 70} },
+				colors: [0xFFE3E5E7, 0xFFB3B7BD],
+				pos: [0.0, 1.0],
+				topBorder: 0xFFF3F4F5,
+				bottomBorder: 0xFF66686B,
+				leftBorder: 0xFFD1D4D7,
+				rightBorder: 0xFF8E8789
+			},
+			selected: {
+				font: { name: "freesans", style: #bold, size: 22, color: 0xFFFFFFFF },
+				points: { start: {x: 0, y: 0}, end: {x: 0, y: 70} },
+				colors: [0xFFE1330B, 0xFFB80110],
+				pos: [0.0, 1.0],
+				topBorder: 0xFFEF917B,
+				bottomBorder: 0xFF4B0007,
+				leftBorder: 0xFFD65552,
+				rightBorder: 0xFF651A17
+			},
+		}
+
+	}
+}

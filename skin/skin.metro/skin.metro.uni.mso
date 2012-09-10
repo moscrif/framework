@@ -1,0 +1,102 @@
+/*
+There are two background colors, dark or light, and 10 accent colors,
+magenta (FF0097), purple (A200FF), teal (00ABA9), lime (8CBF26), brown
+(996600), pink (FF0097), orange (F09609), blue (1BA1E2), red (E51400)
+and green (339933).
+*/
+{
+    application:
+    {
+        background: 0xff000000,
+    },
+    keyboard:
+    {
+        background: 0xff000000,
+    },
+    keyboardButton:
+    {
+        background: 0xff333333,
+        backgroundGray: 0xff1f1f1f,
+        font: { name: "Segoe WP Semibold", style: #normal, color: 0xffffffff},
+    },
+    calendarView:
+    {
+        backgroundSelected: 0xff1BA1E2,
+        background: 0xff000000,
+        foreground: 0xffffffff,
+        foreground: 0xff000000,
+        font: { name: "Segoe WP Light", style: #normal, color: 0xffffffff},
+        fontGray: { name: "Segoe WP Light", style: #normal, color: 0xff666666},
+    },
+    calendarDialog:
+    {
+        overlay: 0xdd000000,
+    },
+    button:
+    {
+        background: 0xff000000,
+        foreground: 0xffffffff,
+        border: 0xffffffff,
+        font: { name: "Segoe WP Semibold", style: #normal, color: 0xffffffff}
+    },
+    label:
+    {
+        font: { name: "Segoe WP Light", style: #normal, color: 0xffffffff}
+    },
+    textBox:
+    {
+        background_focused: 0xff393939,
+        background_rest: 0xff1f1f1f,
+        font: { name: "Segoe WP Semibold", style: #normal, color: 0xffffffff},
+        cursor: 0xffffffff
+    },
+    titleBar:
+    {
+        background: 0xff000000,
+        foreground: 0xffffffff,
+        font: { name: "Segoe WP Light", style: #normal }
+    },
+    toolBar:
+    {
+        background: 0xff1f1f1f,
+        font: { name: "Segoe WP Light", style: #normal, color: 0xffffffff }
+    },
+    tabBar:
+    {
+        background: 0xff1f1f1f,
+    },
+    tabBarItem:
+    {
+        font_selected: { name: "Segoe WP Light", style: #normal, color: 0xffffffff },
+        font: { name: "Segoe WP Light", style: #normal, color: 0xff666666 },
+    },
+    listViewItem:
+    {
+        font: { name: "Segoe WP Light", style: #normal, color: 0xffffffff },
+    },
+    listViewItemPicker:
+    {
+        icon: 0xffffffff,
+    },
+    tileViewItem:
+    {
+        background: 0xff1BA1E2,
+        font: { name: "Segoe WP Light", style: #normal, color: 0xffffffff },
+    },
+    dialog:
+    {
+        overlay: 0xaa000000,
+        background: 0xff000000,
+        border: 0xffffffff,
+        font: { name: "Segoe WP Light", style: #normal, color: 0xffffffff},
+    },
+    menu:
+    {
+        background: 0xff1f1f1f,
+    },
+    menuItem:
+    {
+        background: 0xff1f1f1f,
+        font: { name: "Segoe WP Light", style: #normal, color: 0xffffffff},
+    },
+}

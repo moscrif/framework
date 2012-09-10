@@ -1,0 +1,92 @@
+// map of default keyboard
+{
+    // type: default
+    defaultType : {
+        // state : letters
+        letters :
+        [
+            [[{symbol: "q"}], [{symbol:"w"}], [{symbol:"e"}, {symbol:"\u00E9"}], [{symbol:"r"}], [{symbol:"t"}, {symbol:"\u0165"}], [{symbol:"y"}, {symbol:"\u00FD"}], [{symbol:"u"}, {symbol:"\u00FA"}], [{symbol:"i"}, {symbol:"\u00ED"}], [{symbol:"o"}, {symbol:"\u00F3"}, {symbol:"\u00F4"}], [{symbol:"p"}]],
+            [[{symbol: "a"}], [{symbol:"s"}], [{symbol:"d"}], [{symbol:"f"}], [{symbol:"g"}], [{symbol:"h"}], [{symbol:"j"}], [{symbol:"k"}], [{symbol:"l"}]],
+            [[{symbol: #shift, highlight: true}], [{symbol:"z"}], [{symbol:"x"}], [{symbol:"c"}], [{symbol:"v"}], [{symbol:"b"}], [{symbol:"n"}], [{symbol:"m"}], [{symbol: #backspace, highlight: true}]],
+            [[{symbol:#alt123, highlight: true}], [{symbol:#space, }], [{symbol:#enter, highlight: true}]]
+        ],
+        numbers :
+        [
+            [[{symbol: "1"}], [{symbol:"2"}], [{symbol:"3"}], [{symbol:"4"}], [{symbol:"5"}], [{symbol:"6"}], [{symbol:"7"}], [{symbol:"8"}], [{symbol:"9"}], [{symbol:"0"}]],
+            [[{symbol: "-"}], [{symbol:"/"}], [{symbol:":"}], [{symbol:";"}], [{symbol:"("}], [{symbol:")"}], [{symbol:"$"}], [{symbol:"&"}], [{symbol:"@"}], [{symbol:"\""}]],
+            [[{symbol: #altSymbols, highlight: true}], [{symbol:"."}], [{symbol:","}], [{symbol:"?"}], [{symbol:"!"}], [{symbol:"\'"}], [{symbol: #backspace, highlight: true}]],
+            [[{symbol:#altABC, highlight: true}], [{symbol:#space}], [{symbol:#enter, highlight: true}]]
+        ],
+        symbols :
+        [
+            [[{symbol: "["}], [{symbol:"]"}], [{symbol:"{"}], [{symbol:"}"}], [{symbol:"#"}], [{symbol:"%"}], [{symbol:"^"}], [{symbol:"*"}], [{symbol:"+"}], [{symbol:"="}]],
+            [[{symbol: "_"}], [{symbol:"\\"}], [{symbol:"|"}], [{symbol:"~"}], [{symbol:"<"}], [{symbol:">"}], [{symbol:"$"}], [{symbol:"£"}], [{symbol:"¥"}], [{symbol:"•"}]],
+            [[{symbol: #alt123, highlight: true}], [{symbol:"."}], [{symbol:","}], [{symbol:"?"}], [{symbol:"!"}], [{symbol:"'"}], [{symbol: #backspace, highlight: true}]],
+            [[{symbol:#altABC, highlight: true}], [{symbol:#space}], [{symbol:#enter, highlight: true}]]
+        ],
+    },
+    webType : {
+        letters :
+        [
+            [[{symbol: "q"}], [{symbol:"w"}], [{symbol:"e"}, {symbol:"\u00E9"}], [{symbol:"r"}], [{symbol:"t"}, {symbol:"\u0165"}], [{symbol:"y"}, {symbol:"\u00FD"}], [{symbol:"u"}, {symbol:"\u00FA"}], [{symbol:"i"}, {symbol:"\u00ED"}], [{symbol:"o"}, {symbol:"\u00F3"}, {symbol:"\u00F4"}], [{symbol:"p"}]],
+            [[{symbol: "a"}], [{symbol:"s"}], [{symbol:"d"}], [{symbol:"f"}], [{symbol:"g"}], [{symbol:"h"}], [{symbol:"j"}], [{symbol:"k"}], [{symbol:"l"}]],
+            [[{symbol: #shift, highlight: true}], [{symbol:"z"}], [{symbol:"x"}], [{symbol:"c"}], [{symbol:"v"}], [{symbol:"b"}], [{symbol:"n"}], [{symbol:"m"}], [{symbol: #backspace, highlight: true}]],
+            [[{symbol:#alt123, highlight: true}], [{symbol:"."}], [{symbol:"/"}], [{symbol:".com"}], [{symbol:#enter, highlight: true}]]
+        ],
+        numbers :
+        [
+            [[{symbol: "1"}], [{symbol:"2"}], [{symbol:"3"}], [{symbol:"4"}], [{symbol:"5"}], [{symbol:"6"}], [{symbol:"7"}], [{symbol:"8"}], [{symbol:"9"}], [{symbol:"0"}]],
+            [[{symbol: "-"}], [{symbol:"/"}], [{symbol:":"}], [{symbol:";"}], [{symbol:"("}], [{symbol:")"}], [{symbol:"$"}], [{symbol:"&"}], [{symbol:"@"}], [{symbol:"\""}]],
+            [[{symbol: #altSymbols, highlight: true}], [{symbol:"."}], [{symbol:","}], [{symbol:"?"}], [{symbol:"!"}], [{symbol:"\'"}], [{symbol: #backspace, highlight: true}]],
+            [[{symbol:#altABC, highlight: true}], [{symbol:"."}], [{symbol:"/"}], [{symbol:".com"}], [{symbol:#enter, highlight: true}]]
+        ],
+        symbols :
+        [
+            [[{symbol: "["}], [{symbol:"]"}], [{symbol:"{"}], [{symbol:"}"}], [{symbol:"#"}], [{symbol:"%"}], [{symbol:"^"}], [{symbol:"*"}], [{symbol:"+"}], [{symbol:"="}]],
+            [[{symbol: "_"}], [{symbol:"\\"}], [{symbol:"|"}], [{symbol:"~"}], [{symbol:"<"}], [{symbol:">"}], [{symbol:"$"}], [{symbol:"£"}], [{symbol:"¥"}], [{symbol:"•"}]],
+            [[{symbol: #alt123, highlight: true}], [{symbol:"."}], [{symbol:","}], [{symbol:"?"}], [{symbol:"!"}], [{symbol:"'"}], [{symbol: #backspace, highlight: true}]],
+            [[{symbol:#altABC, highlight: true}], [{symbol:"."}], [{symbol:"/"}], [{symbol:".com"}], [{symbol:#enter, highlight: true}]]
+        ],
+    },
+    emailType : {
+        letters :
+        [
+            [[{symbol: "q"}], [{symbol:"w"}], [{symbol:"e"}, {symbol:"\u00E9"}], [{symbol:"r"}], [{symbol:"t"}, {symbol:"\u0165"}], [{symbol:"y"}, {symbol:"\u00FD"}], [{symbol:"u"}, {symbol:"\u00FA"}], [{symbol:"i"}, {symbol:"\u00ED"}], [{symbol:"o"}, {symbol:"\u00F3"}, {symbol:"\u00F4"}], [{symbol:"p"}]],
+            [[{symbol: "a"}], [{symbol:"s"}], [{symbol:"d"}], [{symbol:"f"}], [{symbol:"g"}], [{symbol:"h"}], [{symbol:"j"}], [{symbol:"k"}], [{symbol:"l"}]],
+            [[{symbol: #shift, highlight: true}], [{symbol:"z"}], [{symbol:"x"}], [{symbol:"c"}], [{symbol:"v"}], [{symbol:"b"}], [{symbol:"n"}], [{symbol:"m"}], [{symbol: #backspace, highlight: true}]],
+            [[{symbol:#alt123, highlight: true}], [{symbol:"."}], [{symbol:"@"}], [{symbol:".com"}], [{symbol:#enter, highlight: true}]]
+        ],
+        numbers :
+        [
+            [[{symbol: "1"}], [{symbol:"2"}], [{symbol:"3"}], [{symbol:"4"}], [{symbol:"5"}], [{symbol:"6"}], [{symbol:"7"}], [{symbol:"8"}], [{symbol:"9"}], [{symbol:"0"}]],
+            [[{symbol: "-"}], [{symbol:"/"}], [{symbol:":"}], [{symbol:";"}], [{symbol:"("}], [{symbol:")"}], [{symbol:"$"}], [{symbol:"&"}], [{symbol:"@"}], [{symbol:"\""}]],
+            [[{symbol: #altSymbols, highlight: true}], [{symbol:"."}], [{symbol:","}], [{symbol:"?"}], [{symbol:"!"}], [{symbol:"\'"}], [{symbol: #backspace, highlight: true}]],
+            [[{symbol:#altABC, highlight: true}], [{symbol:"."}], [{symbol:"@"}], [{symbol:".com"}], [{symbol:#enter, highlight: true}]]
+        ],
+        symbols :
+        [
+            [[{symbol: "["}], [{symbol:"]"}], [{symbol:"{"}], [{symbol:"}"}], [{symbol:"#"}], [{symbol:"%"}], [{symbol:"^"}], [{symbol:"*"}], [{symbol:"+"}], [{symbol:"="}]],
+            [[{symbol: "_"}], [{symbol:"\\"}], [{symbol:"|"}], [{symbol:"~"}], [{symbol:"<"}], [{symbol:">"}], [{symbol:"$"}], [{symbol:"£"}], [{symbol:"¥"}], [{symbol:"•"}]],
+            [[{symbol: #alt123, highlight: true}], [{symbol:"."}], [{symbol:","}], [{symbol:"?"}], [{symbol:"!"}], [{symbol:"'"}], [{symbol: #backspace, highlight: true}]],
+            [[{symbol:#altABC, highlight: true}], [{symbol:"."}], [{symbol:"@"}], [{symbol:".com"}], [{symbol:#enter, highlight: true}]]
+        ],
+    },
+    pinType : {
+        letters :
+        [
+            [[{symbol: "1"}], [{symbol:"2"}], [{symbol:"3"}]],
+            [[{symbol: "4"}], [{symbol:"5"}], [{symbol:"6"}]],
+            [[{symbol: "7"}], [{symbol:"8"}], [{symbol:"9"}]],
+            [[{symbol: "0"}]],
+        ]
+    },
+    phoneType : {
+        letters :
+        [
+            [[{symbol: "1"}], [{symbol:"2"}], [{symbol:"3"}]],
+            [[{symbol: "4"}], [{symbol:"5"}], [{symbol:"6"}]],
+            [[{symbol: "7"}], [{symbol:"8"}], [{symbol:"9"}]],
+            [[{symbol: "*"}], [{symbol:"0"}], [{symbol:"#"}]],
+        ]
+    }
+}
