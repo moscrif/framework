@@ -50,15 +50,29 @@ class AdBanner : BaseClass
         this._impl.hide();
     }
 
+    function _getMainWindow()
+    {
+        return Game.instance._window;
+    }
+
     function _getSize()
     {
-        switch(this._size) {
-            case #default: return (System.scale * 320, System.scale * 50);
-            case #full: return (System.scale * 300, System.scale * 250);
-            case #leaderboard: return (System.scale * 728, System.scale * 90);
-            case #skyscraper: return (System.scale * 120, System.scale * 600);
-            case #smartPortrait: return (System.width, System.scale * (System.IS_TABLET ? 90 : 50));
-            case #smartLandscape: return (System.scale * (System.IS_TABLET ? 90 : 32), System.height);
+        if (this._provider == #AdMob) {
+            switch(this._size) {
+                case #default: return (System.scale * 320, System.scale * 50);
+                case #full: return (System.scale * 300, System.scale * 250);
+                case #leaderboard: return (System.scale * 728, System.scale * 90);
+                case #skyscraper: return (System.scale * 120, System.scale * 600);
+                case #smartPortrait: return (System.width, System.scale * (System.IS_TABLET ? 90 : 50));
+                case #smartLandscape: return (System.scale * (System.IS_TABLET ? 90 : 32), System.height);
+            }
+        }
+        if (this._provider == #iAd) {
+            var mainWindow = this._getMainWindow();
+            // portrait
+            return (System.width, System.scale * (System.IS_TABLET ? 66 : 50));
+            // landscape
+            return (System.width, System.scale * (System.IS_TABLET ? 32 : 50));
         }
         return (System.width, System.scale * 50);
     }
@@ -81,6 +95,7 @@ class AdBanner : BaseClass
         }
 
         var (w, h) = this._getSize();
+        var mainWindow = this._getMainWindow();
         this._impl = {
             window: null,
             show: function(x, y) {
@@ -93,7 +108,7 @@ class AdBanner : BaseClass
                 {
                     canvas.drawRect(0, 0, this.width, this.height, new Paint());
                 }
-                Game.instance._window.add(this.window);
+                mainWindow.add(this.window);
             },
             hide: function() {
                 this.window.detach();
