@@ -235,6 +235,8 @@ class Layer : GameControl
     */
     function draw(canvas)
     {
+        if (!this._visible)
+            return;
         assert canvas instanceof Canvas;
         canvas.save();
         for (var child in this._childs)

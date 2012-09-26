@@ -306,6 +306,42 @@ class Scene : BaseClass
     }
 
     /**
+    Event fired, when user press the key. This method can be overwrite to manage key events. However it is important to call super.keyPressed(key) in overwriten method.
+    @method keyPressed
+    @protected
+    @param key {Symbol} the pressed key
+    @example
+        function keyPressed(key)
+        {
+            super.keyPressed(key);
+            if (key == #back)
+                Game.instance.pop();
+            ...
+        }
+    */
+    function keyPressed(key)
+    {
+    }
+
+    /**
+    Event fired, when user releases the keyy. This method can be overwrite to manage key events. However it is important to call super.keyReleased(key) in overwriten method.
+    @method keyReleased
+    @protected
+    @param key {Symbol} the pressed key
+    @example
+        function keyReleased(key)
+        {
+            super.keyReleased(key);
+            if (key == #back)
+                Game.instance.pop();
+            ...
+        }
+    */
+    function keyReleased(key)
+    {
+    }
+
+    /**
     Event fired on enter to the scene
     @event onEnter
     */

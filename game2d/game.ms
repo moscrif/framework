@@ -1,4 +1,5 @@
 include "lib://core/baseClass.ms"
+include "lib://graphics/paintCache.ms"
 include "lib://game2d/scene.ms"
 include "lib://game2d/sprite.ms"
 include "lib://game2d/base/sceneTransition.ms"
@@ -67,15 +68,6 @@ class Game : BaseClass
             var self = this super;
             if (typeof self.draw == #function)
                 self.draw.call(self, canvas);
-            if (self._transition) {
-                self._transition.draw(canvas);
-            } else {
-                var scene = self._scenes.length ? self._scenes[self._scenes.length - 1] : null;
-                if (scene)
-                    scene.draw(canvas);
-            }
-            for (var sprite in self._sprites)
-                sprite.draw(canvas);
         }
 
         this._window.onProcess = function(sender) {
@@ -149,6 +141,9 @@ class Game : BaseClass
                 return;
             if (self.keyPressed != null)
                 self.keyPressed.call(self, key);
+            var scene = self._scenes.length ? self._scenes[self._scenes.length - 1] : null;
+            if (scene)
+                scene.keyPressed(key);
             return true;
         }
 
@@ -159,6 +154,9 @@ class Game : BaseClass
                 return;
             if (self.keyReleased != null)
                 self.keyReleased.call(self, key);
+            var scene = self._scenes.length ? self._scenes[self._scenes.length - 1] : null;
+            if (scene)
+                scene.keyReleased(key);
             return true;
         }
 
@@ -316,7 +314,31 @@ class Game : BaseClass
     */
     function draw(canvas)
     {
-        canvas.clear(0xffffffff);
+        // TODO: temporary solution because of OpenGL
+        var paintCache = PaintCache.instance;
+        if (!paintCache._drawCached) {
+            const strA = "abcdefghijklmnopqrstuvwxyz";
+            const strB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const strC = "0123456789 .,;:-+*/";
+            for (var key in paintCache.paints) {
+                var paint = paintCache.paints[key];
+                canvas.drawText(strA, 0, 100, paint);
+                canvas.drawText(strB, 0, 110, paint);
+                canvas.drawText(strC, 0, 120, paint);
+            }
+            paintCache._drawCached = true;
+        }
+        // <--
+        var self = this;
+        if (self._transition) {
+            self._transition.draw(canvas);
+        } else {
+            var scene = self._scenes.length ? self._scenes[self._scenes.length - 1] : null;
+            if (scene)
+                scene.draw(canvas);
+        }
+        for (var sprite in self._sprites)
+            sprite.draw(canvas);
     }
 
     /**
@@ -883,9 +905,10 @@ class Game : BaseClass
     /**
     This property sets supported device orientations. If there are more supported orientations event onOrientationChanged is called, when device orientation change.
         Supported are:
+
     * #portrait
-    * landscape-left
-    * landscape-right
+    * #landscape-left
+    * #landscape-right
     @property orientation
     @type {Symbol}
     */

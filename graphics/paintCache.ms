@@ -1,45 +1,45 @@
-include "lib://graphics/drawings/drawing.ms";
-
 class PaintCache
 {
+    var _singleton = null;
+    var _storage = {};
+
     function this()
     {
-        this._storage = {};
+        assert PaintCache._singleton == null;
+        PaintCache._singleton = this;
     }
 
     property instance(v)
     {
         get {
 
-            if( PaintCache.instace === undefined)
-                PaintCache.instace = new PaintCache();
-
-            return PaintCache.instace
+            if (PaintCache._singleton == null)
+                new PaintCache();
+            return PaintCache._singleton;
         }
     }
 
-    property storage(v)
+    property paints(v)
     {
         get return this._storage;
     }
 
-    function hasDrawing(key)
+    function hasPaint(key)
     {
-        return this.storage[key] instanceof Paint ? true : false;
+        return PaintCache._storage[key] instanceof Paint ? true : false;
     }
 
-
-    function getDrawing(key)
+    function getPaint(key)
     {
-        if(this.hasDrawing(key) === true)
-            return this.storage[key];
-
-        throw new Exception("[DrawingCache.getDrawing] undefined key:" + key);
+        if (PaintCache.hasPaint(key) === true)
+            return PaintCache._storage[key];
+        return null;
+        //throw new Exception("[PaintCache.getPaint] undefined key:" + key);
     }
 
-    function storeDrawing(key,obj)
+    function storePaint(key, obj)
     {
-        this.storage[key] = obj;
+        PaintCache._storage[key] = obj;
     }
 
 }

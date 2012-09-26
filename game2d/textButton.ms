@@ -1,5 +1,6 @@
 include "lib://game2d/base/button.ms"
 include "lib://game2d/utils.ms"
+include "lib://graphics/paintCache.ms"
 
 /**
 TextButton class is used to show simple text on the screen.
@@ -23,13 +24,32 @@ What is required is to specify {{#crossLink "Paint"}}{{/crossLink}} instance wit
 */
 class TextButton : Button
 {
-    /**
-    Singleton of the default paint
-    @static
-    @attribute instance
-    @type Game
-    */
-    var defaultPaint = null; // static
+
+    // @region Statics
+
+    var _defaultPaint = null; // static
+
+    function getDefaultPaint()
+    {
+        if (TextButton._defaultPaint != null) {
+            return TextButton._defaultPaint;
+        }
+
+        var paint = PaintCache.getPaint(TextButton);
+        if (paint) {
+            TextButton._defaultPaint = paint;
+            return paint;
+        }
+
+        TextButton._defaultPaint = new Paint();
+        TextButton._defaultPaint.typeface = Typeface.fromName("");
+        TextButton._defaultPaint.textSize = System.height / 15;
+        TextButton._defaultPaint.color = 0xffffffff;
+
+        return TextButton._defaultPaint;
+    }
+
+    // @endregion
 
     /**
     Object initialisation. This method is called from class constructor and can be used in overwritten classes as a class constructor.
@@ -39,18 +59,9 @@ class TextButton : Button
     function init()
     {
         super.init();
-
         this._text = this.options.text || "";
         this._anchorX = -1;
         this._anchorY = -1;
-
-        if (TextButton.defaultPaint == null) {
-            var paint = new Paint();
-            paint.typeface = Typeface.fromName("");
-            paint.textSize = System.height / 15;
-            paint.color = 0xffffffff;
-            TextButton.defaultPaint = paint;
-        }
     }
 
     /**
@@ -71,7 +82,7 @@ class TextButton : Button
         get return this._text;
         set {
             this._text = v;
-            var paint = this._paint || TextButton.defaultPaint;
+            var paint = this._paint || TextButton.getDefaultPaint();
             var (dw, dh) = paint.measureText(this._text);
             this._width = dw;
             this._height = paint.fontBottom - paint.fontTop;
@@ -147,7 +158,7 @@ class TextButton : Button
     */
     property color(v)
     {
-        get return (this._paint || TextButton.defaultPaint).color;
+        get return (this._paint || TextButton.getDefaultPaint()).color;
         set {
             if (this._paint === TextButton.defaultPaint)
                 this._paint = clonePaint(TextButton.defaultPaint);
@@ -173,10 +184,10 @@ class TextButton : Button
     */
     property textSize(v)
     {
-        get return (this._paint || TextButton.defaultPaint).textSize;
+        get return (this._paint || TextButton.getDefaultPaint()).textSize;
         set {
-            if (this._paint === TextButton.defaultPaint)
-                this._paint = clonePaint(TextButton.defaultPaint);
+            if (this._paint === TextButton.getDefaultPaint())
+                this._paint = clonePaint(TextButton.getDefaultPaint());
             else if (this._paint == null)
                 this._paint = new Paint();
             this._paint.textSize = v;
@@ -191,9 +202,7 @@ class TextButton : Button
     */
     function draw(canvas)
     {
-        var paint = this._paint || TextButton.defaultPaint;
-
-        //this.show();
+        var paint = this._paint || TextButton.getDefaultPaint();
 
         canvas.save(#matrix);
         canvas.translate(this._x, this._y);
@@ -201,6 +210,7 @@ class TextButton : Button
         canvas.scale(this._scale, this._scale);
         canvas.translate(-this._anchorX, -this._anchorY);
         canvas.drawText(this._text, 0, 0 + (this._height + paint.fontDescent)/2, paint);
+        //debug: canvas.drawRect(0, 0, this._width, this._height, paint);
         canvas.restore();
     }
 

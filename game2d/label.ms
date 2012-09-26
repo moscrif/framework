@@ -16,13 +16,31 @@ Label class is used to show simple text on the screen without support of touch e
 */
 class Label : GameObject
 {
-    /**
-    Singleton of the game object.
-    @static
-    @attribute instance
-    @type ImageButton
-    */
-    var defaultPaint = null; // static
+    // @region Statics
+
+    var _defaultPaint = null; // static
+
+    function getDefaultPaint()
+    {
+        if (Label._defaultPaint != null) {
+            return Label._defaultPaint;
+        }
+
+        var paint = PaintCache.getPaint(Label);
+        if (paint) {
+            Label._defaultPaint = paint;
+            return paint;
+        }
+
+        Label._defaultPaint = new Paint();
+        Label._defaultPaint.typeface = Typeface.fromName("");
+        Label._defaultPaint.textSize = System.height / 15;
+        Label._defaultPaint.color = 0xffffffff;
+
+        return Label._defaultPaint;
+    }
+
+    // @endregion
 
     /**
     Object initialisation. It is usally no need to overwrite this method, but it is possible to overwrite it and use it as a class constructor.
@@ -31,18 +49,9 @@ class Label : GameObject
     function init()
     {
         super.init();
-
         this._text = this.options.text || "";
         this._anchorX = -1;
         this._anchorY = -1;
-
-        if (Label.defaultPaint == null) {
-            var paint = new Paint();
-            paint.typeface = Typeface.fromName("");
-            paint.textSize = System.height / 15;
-            paint.color = 0xffffffff;
-            Label.defaultPaint = paint;
-        }
     }
 
     /**
@@ -61,7 +70,7 @@ class Label : GameObject
         get return this._text;
         set {
             this._text = v;
-            var paint = this._paint || Label.defaultPaint;
+            var paint = this._paint || Label.getDefaultPaint();
             var (dw, dh) = paint.measureText(this._text);
             this._width = dw;
             this._height = paint.fontBottom - paint.fontTop;
@@ -136,10 +145,10 @@ class Label : GameObject
     */
     property color(v)
     {
-        get return (this._paint || Label.defaultPaint).color;
+        get return (this._paint || Label.getDefaultPaint()).color;
         set {
-            if (this._paint === Label.defaultPaint)
-                this._paint = clonePaint(Label.defaultPaint);
+            if (this._paint === Label.getDefaultPaint())
+                this._paint = clonePaint(Label.getDefaultPaint());
             else if (this._paint == null)
                 this._paint = new Paint();
             this._paint.color = v;
@@ -153,10 +162,10 @@ class Label : GameObject
     */
     property alpha(v)
     {
-        get return (this._paint || Label.defaultPaint).alpha;
+        get return (this._paint || Label.getDefaultPaint()).alpha;
         set {
-            if (this._paint === Label.defaultPaint)
-                this._paint = clonePaint(Label.defaultPaint);
+            if (this._paint === Label.getDefaultPaint())
+                this._paint = clonePaint(Label.getDefaultPaint());
             else if (this._paint == null)
                 this._paint = new Paint();
             this._paint.alpha = v;
@@ -177,10 +186,10 @@ class Label : GameObject
     */
     property textSize(v)
     {
-        get return (this._paint || Label.defaultPaint).textSize;
+        get return (this._paint || Label.getDefaultPaint()).textSize;
         set {
-            if (this._paint === Label.defaultPaint)
-                this._paint = clonePaint(Label.defaultPaint);
+            if (this._paint === Label.getDefaultPaint())
+                this._paint = clonePaint(Label.getDefaultPaint());
             else if (this._paint == null)
                 this._paint = new Paint();
             //logI(this._paint);
@@ -195,7 +204,7 @@ class Label : GameObject
     */
     function draw(canvas)
     {
-        var paint = this._paint || Label.defaultPaint;
+        var paint = this._paint || Label.getDefaultPaint();
 
         canvas.save(#matrix);
         canvas.translate(this._x, this._y);

@@ -44,12 +44,14 @@ class SlideToLeft : SceneTransition
         super.draw(canvas);
         if (this._sceneFrom) {
             canvas.save();
+            canvas.clipRect(this._x, 0, this._x + System.width, System.height, #intersect);
             canvas.translate(this._x, 0);
             this._sceneFrom.draw(canvas);
             canvas.restore();
         }
         if (this._sceneTo) {
             canvas.save();
+            canvas.clipRect(System.width + this._x, 0, System.width, System.height, #intersect);
             canvas.translate(System.width + this._x, 0);
             this._sceneTo.draw(canvas);
             canvas.restore();
