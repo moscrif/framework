@@ -319,7 +319,7 @@ class Game : BaseClass
         if (!paintCache._drawCached) {
             const strA = "abcdefghijklmnopqrstuvwxyz";
             const strB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            const strC = "0123456789 .,;:-+*/";
+            const strC = "0123456789 .,;:-+*/#$%&()[]{}";
             for (var key in paintCache.paints) {
                 var paint = paintCache.paints[key];
                 canvas.drawText(strA, 0, 100, paint);
