@@ -1,12 +1,28 @@
 include "lib://core/baseClass.ms"
 
 /**
+This class encapsulated banner ads (iAd for iPhone, iPod and iPad, AdMob for Android devices).
 @class AdBanner
+@extends BaseClass
 @module ads
+@example
+    var banner = new AdBanner({provider:#simulate, testing:true});
+    banner.show(0, 0);
 */
 class AdBanner : BaseClass
 {
 
+    /**
+    Initializes banner ads.
+    @method init
+    @example
+        var banner = new AdBanner({
+            provider:#auto,
+            adId:"a1504f8e07e325a",     // AdMob ID for AdMob system
+            size:#smartPortrait,
+            testing:true
+        });
+    */
     function init()
     {
         super.init();
@@ -23,6 +39,15 @@ class AdBanner : BaseClass
         this._createProvider();
     }
 
+    /** Specified used provider for banner ads (iAd or AdMob).
+
+    * #auto - automatically detects the best provider (iAd for iOS, AdMob for Android, otherwise simlulate banner ads)
+    * #AdMob - use AdMob (on both, iOS and Android)
+    * #iAd - use iAd (iOS only)
+    * #simulate - just simulate banner ads
+    @property provider
+    @type {Symbol}
+    */
     property provider(v)
     {
         get return this._provider;
@@ -40,11 +65,25 @@ class AdBanner : BaseClass
         }
     }
 
+    /**
+    This method creates and shows ad banner at specified position on screen.
+    @method show
+    @param x {Integer} x coordinate of screen's position.
+    @param y {Integer} y coordinate of screen's position.
+    @param [testing=false] {Boolean} You have to set to true when testing.
+    @example
+        var banner = new AdBanner({provider:#auto, adId:"a1504f8e07e325a", size:#smartPortrait, testing:true});
+        banner.show(0, 0);
+    */
     function show(x, y, testing = false)
     {
         this._impl.show(x, y, this._testing);
     }
 
+    /**
+    This method hides ad banner.
+    @method hide
+    */
     function hide()
     {
         this._impl.hide();
