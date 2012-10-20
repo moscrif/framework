@@ -460,8 +460,10 @@ class TiledLayer : GameControl
     */
     function createAnimatedTile(staticTileIndex)
     {
+        if (this._animatedTiles.length == 0)
+            this._animatedTiles.push(0);
         this._animatedTiles.push(staticTileIndex);
-        return -this._animatedTiles.length;
+        return -this._animatedTiles.length+1;
     }
 
     /**
@@ -473,7 +475,6 @@ class TiledLayer : GameControl
     function getAnimatedTile(animatedTileIndex)
     {
         animatedTileIndex *= -1;
-        animatedTileIndex--;
         assert animatedTileIndex >= 0;
         assert animatedTileIndex < this._animatedTiles.length;
         return this._animatedTiles[animatedTileIndex];
@@ -488,9 +489,8 @@ class TiledLayer : GameControl
     function setAnimatedTile(animatedTileIndex, staticTileIndex)
     {
         animatedTileIndex *= -1;
-        animatedTileIndex--;
         assert animatedTileIndex >= 0 : String.printf("Invalid animated index %d", animatedTileIndex);
-        assert animatedTileIndex < this._animatedTiles.length;
+        assert animatedTileIndex <= this._animatedTiles.length;
         this._animatedTiles[animatedTileIndex] = staticTileIndex;
     }
 
@@ -522,6 +522,7 @@ class TiledLayer : GameControl
                 index = this._map[index];
                 if (index < 0) {
                     animatedIndex = -index - 1;
+                    if (animatedIndex > 0)
                     index = this._animatedTiles[animatedIndex]; // else index--;
                 }
                 var frameX = (index % slices) * (this._tileWidth + this._margin);
