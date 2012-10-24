@@ -319,12 +319,14 @@ class Game : BaseClass
         if (!paintCache._drawCached) {
             const strA = "abcdefghijklmnopqrstuvwxyz";
             const strB = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            const strC = "0123456789 .,;:-+*/#$%&()[]{}";
+            const strC = "0123456789 .,;:-+*=()[]{}";
+            const strD =  "!@#$%^&*`'\"~<>/\\";
             for (var key in paintCache.paints) {
                 var paint = paintCache.paints[key];
                 canvas.drawText(strA, 0, 100, paint);
                 canvas.drawText(strB, 0, 110, paint);
                 canvas.drawText(strC, 0, 120, paint);
+                canvas.drawText(strD, 0, 130, paint);
             }
             paintCache._drawCached = true;
         }
@@ -350,7 +352,7 @@ class Game : BaseClass
     {
     }
 
-    /*
+    /**
     Push new scane to the game. The scene can be pushed with nice transition effect.
     @method push
     @param scene {Scene} The instance of scene class which should be added to the game

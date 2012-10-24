@@ -77,7 +77,12 @@ class AdBanner : BaseClass
     */
     function show(x, y, testing = false)
     {
-        this._impl.show(x, y, this._testing);
+        this._impl.show(x, y, testing);
+    }
+
+    function move(x, y)
+    {
+        this._impl.move(x, y);
     }
 
     /**
@@ -148,6 +153,10 @@ class AdBanner : BaseClass
                     canvas.drawRect(0, 0, this.width, this.height, new Paint());
                 }
                 mainWindow.add(this.window);
+            },
+            move: function(x, y) {
+                this.window.left = x;
+                this.window.top = y;
             },
             hide: function() {
                 this.window.detach();
