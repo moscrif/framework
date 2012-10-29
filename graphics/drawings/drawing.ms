@@ -44,14 +44,14 @@ class Drawing : BaseClass
         obj._ownerProperty = args[1];
 
 
-        if(PaintCache.instance.hasDrawing(key) && !obj._owner.initDefaults){
-            obj._paint = PaintCache.instance.getDrawing(key);
+        if(PaintCache.instance.hasPaint(key) && !obj._owner.initDefaults){
+            obj._paint = PaintCache.instance.getPaint(key);
         }else {
             obj._paint = new Paint();
             count++;
             obj._paint.id = count;
             //cache only theme styles
-            PaintCache.instance.storeDrawing(key,obj._paint);
+            PaintCache.instance.storePaint(key,obj._paint);
         }
 
         return obj;
