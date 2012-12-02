@@ -176,10 +176,11 @@ class Layer : GameControl
     */
     function add(obj)
     {
-        assert obj != null;
+        if (obj == null)
+            return;
         if (obj instanceof GameControl) {
             this._controls.push(obj);
-            this._controls.sort(:a, b {return a.z - b.z});
+            this._controls.sort(:a, b {return -a.z - b.z});
             this._childs.push(obj);
             this._childs.sort(:a, b {return a.z - b.z});
         } else if (obj instanceof GameObject) {
@@ -206,7 +207,7 @@ class Layer : GameControl
             obj = this.findObject(obj) || this.findControl(obj);
         if (obj instanceof GameControl) {
             this._controls.removeByValue(obj);
-            this._controls.sort(:a, b {return a.z - b.z});
+            this._controls.sort(:a, b {return -a.z - b.z});
             this._childs.removeByValue(obj);
             this._childs.sort(:a, b {return a.z - b.z});
         } else if (obj instanceof GameObject) {
@@ -274,10 +275,11 @@ class Layer : GameControl
     */
     function pointerPressed(x, y)
     {
-        super.pointerPressed(x, y);
         for (var control in this._controls)
             if (control.intersectsPoint(x, y))
-                control.pointerPressed(x, y);
+                if (control.pointerPressed(x, y) === true)
+                    return true;
+        super.pointerPressed(x, y);
     }
 
     /**
@@ -289,10 +291,11 @@ class Layer : GameControl
     */
     function pointerDragged(x, y)
     {
-        super.pointerDragged(x, y);
         for (var control in this._controls)
             if (control.intersectsPoint(x, y))
-                control.pointerDragged(x, y);
+                if (control.pointerDragged(x, y) === true)
+                    return true;
+        super.pointerDragged(x, y);
     }
 
     /**
@@ -313,9 +316,10 @@ class Layer : GameControl
     */
     function pointerReleased(x, y)
     {
-        super.pointerReleased(x, y);
         for (var control in this._controls)
             if (control.intersectsPoint(x, y))
-                control.pointerReleased(x, y);
+                if (control.pointerReleased(x, y) === true)
+                    return true;
+        super.pointerReleased(x, y);
     }
 }

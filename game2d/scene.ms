@@ -177,7 +177,7 @@ class Scene : BaseClass
         assert obj != null;
         if (obj instanceof GameControl) {
             this._controls.push(obj);
-            this._controls.sort(:a, b {return a.z - b.z});
+            this._controls.sort(:a, b {return -a.z - b.z});
             this._childs.push(obj);
             this._childs.sort(:a, b {return a.z - b.z});
         } else if (obj instanceof GameObject) {
@@ -204,7 +204,7 @@ class Scene : BaseClass
             obj = this.findObject(obj) || this.findControl(obj);
         if (obj instanceof GameControl) {
             this._controls.removeByValue(obj);
-            this._controls.sort(:a, b {return a.z - b.z});
+            this._controls.sort(:a, b {return -a.z - b.z});
             this._childs.removeByValue(obj);
             this._childs.sort(:a, b {return a.z - b.z});
         } else if (obj instanceof GameObject) {
@@ -268,7 +268,8 @@ class Scene : BaseClass
     {
         for (var control in this._controls)
             if (control.visible && control.intersectsPoint(x, y))
-                control.pointerPressed(x, y);
+                if (control.pointerPressed(x, y) === true)
+                    return true;
     }
 
     /**
@@ -282,7 +283,8 @@ class Scene : BaseClass
     {
         for (var control in this._controls)
             if (control.visible && control.intersectsPoint(x, y))
-                control.pointerDragged(x, y);
+                if (control.pointerDragged(x, y) === true)
+                    return true;
     }
 
     /**
@@ -302,7 +304,8 @@ class Scene : BaseClass
     {
         for (var control in this._controls)
             if (control.visible && control.intersectsPoint(x, y))
-                control.pointerReleased(x, y);
+                if (control.pointerReleased(x, y) === true)
+                    return true;
     }
 
     /**

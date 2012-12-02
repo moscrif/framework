@@ -57,13 +57,17 @@ class GameControl : GameObject
     */
     function pointerReleased(x, y)
     {
+        var result;
+
         if (!this._clicked)
             return;
 
         if (this.click)
-            this.click.call(this);
+            result = this.click.call(this);
 
         this._clicked = false;
+
+        return result;
     }
 
     /**
