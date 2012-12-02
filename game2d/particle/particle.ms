@@ -1,41 +1,41 @@
 include "lib://core/baseClass.ms"
-include "lib://game2d/particle/vector.ms"
 
 /**
 Particle is a abstract entity with a small set of attributes such as position and color that ultimately dictate the particle's behavior and appearance. This class is a base class for classes, whih are used to create particles.
 @module game2d
 @class Particle
 @example
-    // custom paricle class
-    class MyParticle : Particle
+    //class CustomParticle - used by comet effect emitter
+    class CustomParticle : Particle
     {
-        // static variables
-        // static paint used by all instances to draw bitmap
-        var paint = null;
-        // static bitmap used by all instances
-        var img = Bitmap.fromFile("app://fire.png");
-    
         function init()
         {
             super.init();
     
-            ...
+            // create paint used to bitmap effect
+            this._paint = new Paint();
+            this._paint.alpha = 80;
+    
+            // create animator
+            var animator = new Animator({
+                transition: Animator.Transition.easeIn,     // start up slowly and then quickly speed up at the end of the animation
+                duration: 1100,                              // length of animation in miliseconds
+            }); 
+            animator.addSubject(function(state) {           // state starts from 1.0 to 0.0
+                this super._paint.alpha = 255-(state*255).toInteger();
+            }); 
+            animator.play();
         }
     
-        // owerwrite ancestor's draw function
         function draw(canvas)
         {
-            // set bitmap translate acording to actual particle position
-            this._matrix.translateX = this._position.x;
-            this._matrix.translateY = this._position.y;
-            // draw custom particle bitmap
-            canvas.drawBitmapMatrix(MyParticle.img, this._matrix, MyParticle.paint);
+            canvas.drawBitmap(GFX.star, (this.x).toInteger() - GFX.star.width / 2, (this.y).toInteger() - GFX.star.height / 2, this._paint);
         }
     }
     ...
     new Emitter({
        ...
-       particleClass   : MyParticle
+       particleClass   : CustomParticle
     })
 */
 class Particle : BaseClass
@@ -56,146 +56,212 @@ class Particle : BaseClass
     function init()
     {
         super.init();
-        this._position     = this.options.position || new Vector({x: 0, y:0});
-        this._velocity     = this.options.velocity || new Vector({x: 0, y:0});
-        this._acceleration = this.options.acceleration || new Vector({x: 0, y:0});
-        this._ttl          = this.options.ttl || -1;
-        this._lived        = this.options.lived || 0;
+        this._x             = this.options.x || 0.0;
+        this._y             = this.options.y || 0.0;
+        this._vx            = this.options.vx || 0.0;
+        this._vy            = this.options.vy || 0.0;
+        this._ax            = this.options.ax || 0.0;
+        this._ay            = this.options.ay || 0.0;
+        this._width         = -1;
+        this._height        = -1;
+        this._image         = null;
+        this._age           = 0;     // ms
     }
 
-   /**
-    Location of the particle center.
-    @property position
-    @type Vector
+    /**
+    Width of the particle in pixels. It is automatically sets according to particle's image width.
+    @property width
+    @type Integer
+    */
+    property width(v)
+    {
+        get return this._width;
+        set {
+            assert v instanceof Integer;
+            this._width = v;
+        }
+    }
+
+    /**
+    Height of the particle in pixels. It is automatically sets according to particle's image width.
+    @property height
+    @type Integer
+    */
+    property height(v)
+    {
+        get return this._height;
+        set {
+            assert v instanceof Integer;
+            this._height = v;
+        }
+    }
+
+    /**
+    Image used as a particle image. If no image is set only black dot is used.
+    @property image
+    @type Bitmap
     @example
-        // owerwrite ancestor's draw function
-        function draw(canvas)
-        {
-            // set bitmap translate acording to actual particle position
-            this._matrix.translateX = this._position.x;
-            this._matrix.translateY = this._position.y;
-            // draw custom particle bitmap
-            canvas.drawBitmapMatrix(MyParticle.img, this._matrix, MyParticle.paint);
-        }
-   */
-   property position(v)
+    this._emitterA = new PointEmitter({
+            ...
+            particleOptions : {
+                image : GFX.starSmall
+            }
+        });
+    */
+    property image(v)
     {
-        get {
-            return this._position;
-        }
+        get return this._image;
         set {
-            assert v instanceof Vector;
-            this._position = v;
+            assert v instanceof Bitmap;
+            this._image = v;
+            if (this._width == -1)
+                this.width = v.width;
+            if (this._height == -1)
+                this.width = v.height;
         }
     }
 
     /**
-    Velocity vector of the particle. The initial velocity is given to the particle, when it is emitted from emitter.
-    @property velocity
-    @type Vector
+    Particle's horizontal position. The value is usually no need to change. It is calculated automatically by the particle system.
+    @property x
+    @type Float
     */
-    property velocity(v)
+    property x(v)
     {
         get {
-            return this._velocity;
+            return this._x;
         }
         set {
-            assert v instanceof Vector;
-            this._velocity = v;
+            if (v instanceof Integer)
+                v = v*1.0;
+            assert v instanceof Float;
+            this._x = v;
+            if (this._startx === false)
+                this._startx = v;
         }
     }
 
     /**
-    Particle acceleration
-    @property acceleration
-    @type Vector
+    Particle's vertical position. The value is usually no need to change. It is calculated automatically by the particle system.
+    @property x
+    @type Float
     */
-    property acceleration(v)
+    property y(v)
     {
         get {
-            return this._acceleration;
+            return this._y;
         }
         set {
-            assert v instanceof Vector;
-            this._acceleration = v;
+            if (v instanceof Integer)
+                v = v*1.0;
+            assert v instanceof Float;
+            this._y = v;
+            if (this._startx === false)
+                this._startx = v;
         }
     }
 
     /**
-    Time to live in milliseconds, default is set to -1, which menas live forever.
-    @property ttl
-    @type Integer
+    Particle's horizontal speed in px/second. The value is usually no need to change. It is calculated automatically by the particle system.
+    @property vx
+    @type Float
     */
-    property ttl(v)
+    property vx(v)
     {
         get {
-            return this._ttl;
+            return this._vx;
         }
         set {
-            assert typeof v == #integer;
-            this._ttl = v;
+            if (v instanceof Integer)
+                v = v*1.0;
+            assert v instanceof Float;
+            this._vx = v;
         }
     }
 
     /**
-    Age of the particle, define time how long particle can be alive.
-    @property lived
-    @type Integer
+    Particle's vertical speed in px/second. The value is usually no need to change. It is calculated automatically by the particle system.
+    @property vy
+    @type Float
     */
-    property lived(v)
+    property vy(v)
     {
         get {
-            return this._lived;
+            return this._vy;
         }
         set {
-            assert typeof v == #integer;
-            this._lived = v;
+            if (v instanceof Integer)
+                v = v*1.0;
+            assert v instanceof Float;
+            this._vy = v;
         }
     }
 
     /**
-    This function affect particle's movement by a force fields.
-    @method submitToFields
-    @param fields {Array} Array of Field
+    Particle's horizontal acceleration. The value is usually no need to change. It is calculated automatically by the particle system.
+    @property vy
+    @type Float
     */
-    function submitToFields(fields)
+    property ax(v)
     {
-        var totalAccelerationX = 0;
-        var totalAccelerationY = 0;
-        for (var i = 0; i < fields.length; i++) {
-            var field = fields[i];
-            assert field instanceof Field;
-            var vectorX = field.position.x - this._position.x;
-            var vectorY = field.position.y - this._position.y;
-            var force = field.mass / Math.pow((vectorX*vectorX+field.mass/2+vectorY*vectorY+field.mass/2),1.5);
-            totalAccelerationX += vectorX * force;
-            totalAccelerationY += vectorY * force;
+        get {
+            return this._ax;
         }
-        this._acceleration = new Vector({x:totalAccelerationX, y:totalAccelerationY});
+        set {
+            if (v instanceof Integer)
+                v = v*1.0;
+            assert v instanceof Float;
+            this._ax = v;
+        }
+    }
+
+    /**
+    Particle's vertical acceleration. The value is usually no need to change. It is calculated automatically by the particle system.
+    @property vy
+    @type Float
+    */
+    property ay(v)
+    {
+        get {
+            return this._ay;
+        }
+        set {
+            if (v instanceof Integer)
+                v = v*1.0;
+            assert v instanceof Float;
+            this._ay = v;
+        }
     }
 
     /**
     Method to move particle based on acceleration and velocity vector.
     @method move
+    @param timestep
+    
     */
-    function move()
+    function move(timeStep, fields = null)
     {
-        this._velocity.x += this._acceleration.x;
-        this._velocity.y += this._acceleration.y;
-        this._position.x += this._velocity.x;
-        this._position.y += this._velocity.y;
-    }
+        this._age += timeStep;
+        var ax = 0.0;
+        var ay = 0.0;
+        var (fx, fy);
 
-    /**
-    Check if particle is a live.
-    @method alive
-    */
-    function alive()
-    {
-        if (this._ttl < 0)
-            return true;
-        this._lived++;
-        return this._lived < this._ttl;
+        if (fields != null) {
+            for (var i in fields) {
+                (fx, fy) = i.getForce(this.x, this.y);
+
+                ax += fx;
+                ay += fy;
+            }
+        }
+
+        this.ax = ax;
+        this.ay = ay;
+
+        this.vx += this.ax;//* (timeStep*1.0 / 1000);
+        this.vy += this.ay;//* (timeStep*1.0 / 1000);
+        this.x += this.vx * (timeStep*1.0 / 1000);
+        this.y += this.vy * (timeStep*1.0 / 1000);
     }
 
     /**
@@ -214,23 +280,9 @@ class Particle : BaseClass
     */
     function draw(canvas)
     {
-        canvas.drawCircle(Math.floor(this._position.x), Math.floor(this._position.y), 1, Particle.paint);
+        if (this.image == null)
+            canvas.drawCircle((this.x).toInteger(), (this.y).toInteger(), 1, Particle.paint);
+        else
+            canvas.drawBitmap(this.image, (this.x).toInteger() - GFX.star.width / 2, (this.y).toInteger() - GFX.star.height / 2, Particle.paint);
     }
-
-    /**
-    Event fired on Draw of particle.
-    @event onDraw
-    @param canvas {Canvas} canvas used to draw graphics
-    */
-    property onDraw(v)
-    {
-        get return this.draw;
-        set {
-
-             if (!(typeof v == #function || v == null))
-                throw new InvalidArgument("[Particle.onDraw] Expects type of function");
-             this.draw = v;
-        }
-    }
-
 }

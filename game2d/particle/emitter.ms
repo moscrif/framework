@@ -1,5 +1,4 @@
 include "lib://core/baseClass.ms"
-include "lib://game2d/particle/vector.ms"
 include "lib://game2d/particle/particle.ms"
 include "lib://game2d/particle/field.ms"
 
@@ -10,27 +9,23 @@ To ensure the proper functioning of emitter it is needed to call emiter's proces
 @module game2d
 @class Emitter
 @example
-    this._emitters = [
-        new Emitter({
-            position        : new Vector({x:System.width/2, y:System.height/2}),
-            velocity        : new Vector({x:2, y:0}),
-            size            : 8,
-            particleLife    : 100,
-            spread          : Math.PI/10,
-            emissionRate    : 4,
-            maxParticles    : 1000;
-        })
-    ];
+    this._emitter = new PointEmitter({
+        x : System.width / 2,
+        y : System.height / 2,
+        speed : 600,
+        angle : 5*Math.PI / 4,
+        spread : Math.PI / 8,
+        particleLife : 1100,
+        emissionRate : 50,
+        particleClass : CustomParticle,
+    });
     ...
-    // map onProcess event
-    function process()
+    // map draw method
+    function draw(canvas)
     {
-        var emitters = this._emitters;
-        var fields = this._fields;
-        
-        //process emitters
-        for (var emitter in emitters)
-            emitter.process(fields);
+        super.draw(canvas);
+
+        this._emitter.draw(canvas);
     }
 */
 class Emitter : BaseClass
@@ -44,78 +39,120 @@ class Emitter : BaseClass
     function init()
     {
         super.init();
-        this._position      = this.options.position || new Vector({x:0, y:0});
-        this._velocity      = this.options.velocity || new Vector({x:0, y:0});
-        this._size          = this.options.size || 8;
-        this._particleLife  = this.options.particleLife || -1;
-        this._spread        = this.options.spread || Math.PI / 32;
-        this._emissionRate  = this.options.emissionRate || 4;
-        this._maxParticles  = this.options.maxParticles || 2000;
-        this._particleClass = Particle;
-        this._particles     = [];
+        this._x                 = this.options.x || 0;
+        this._y                 = this.options.y || 0;
+        this._speed             = this.options.speed || 100;
+        this._particleLife      = this.options.particleLife || -1;
+        this._spread            = this.options.spread || Math.PI / 20;
+        this._emissionRate      = this.options.emissionRate || 40;
+        this._maxParticles      = this.options.maxParticles || 2000;
+        this._particleClass     = this.options.particleClass || Particle;
+        this._particles         = this.options.particles || [];
+        this._fields            = this.options.fields || [];
+        this._particleOptions   = this.options.particleOptions || {};
+        this._stepsPerSeconds   = this.options.stepsPerSeconds || 40;
+        this._angle             = this.options.angle || 0.0;
+
+        this._timer             = new Timer(1000 / this._stepsPerSeconds, true);
+        this._timer.onTick      = function ()
+        {
+            this super._timeStep();
+        }
+        this.start(1000 / this._stepsPerSeconds);
+
+        // the variable which helps to calculate when it is needed to emit the particle if rate is less then steps per seconds
+        this._i = 0.0;
     }
 
-    /**
-    Vector of the emitter center in pixels.
-    @property position
-    @type Vector
-    @example
-        new Emitter({
-            // place emiter to the center of the screen
-            position        : new Vector({x:System.width/2, y:System.height/2}),
-            ...
-        )}
-    */
-    property position(v)
-    {
-        get {
-            return this._position;
-        }
-        set {
-            assert v instanceof Vector;
-            this._position = v;
-        }
-    }
+// @region properties
 
     /**
-    Velocity vector (direction and speed). The vector's direction is a direction of the center of particles stream.
-        The particles variance can be customized by {{#crossLink "Emitter.spread"}}{{/crossLink}} property.
-        The velocity also affects particles' speed. Positive values on x-axis are right and on the y-axis down from the emitter's center.
-    @property velocity
-    @type Vector
-    @example
-        new Emitter({
-            velocity        : new Vector({x:2, y:0}),
-            ...
-        )};
-    */
-    property velocity(v)
-    {
-        get {
-            return this._velocity;
-        }
-        set {
-            assert v instanceof Vector;
-            this._velocity = v;
-        }
-    }
-
-    /**
-    How large the particle is for rendering (doesn't affect particle dynamics or collision).
-    Default size is 8.
-    @property size
+    Horizontal position of the emiter in pixels
+    @property x
     @type Integer
+    @example
+        this._emitter = new PointEmitter({
+            x : System.width / 2,
+            y : System.height / 2,
+            ...
+        });
     */
-    property size(v)
+    property x(v)
     {
         get {
-            return this._size;
+            return this._x;
         }
         set {
-            assert typeof v == #integer;
-            this._size = v;
+            assert v instanceof Integer;
+            this._x = v;
         }
     }
+
+    /**
+    Vertical position of the emiter in pixels
+    @property y
+    @type Integer
+    @example
+        this._emitter = new PointEmitter({
+            x : System.width / 2,
+            y : System.height / 2,
+            ...
+        });
+    */
+    property y(v)
+    {
+        get {
+            return this._y;
+        }
+        set {
+            assert v instanceof Integer;
+            this._y = v;
+        }
+    }
+
+    /**
+    Speed of the emited particles in pixels per second
+    @property speed
+    @type Integer
+    @example
+    this._emitter = new PointEmitter({
+        speed : 10,
+        ...
+    });
+    */
+    property speed(v)
+    {
+        get {
+            return this._speed;
+        }
+        set {
+            assert v instanceof Integer;
+            this._speed = v;
+        }
+    }
+
+    /**
+    Options applied onto particles
+    @property particleOptions
+    @type Object
+    @example
+        this._emitter = new LineEmitter ({
+            particleOptions : {
+                image       : GFX.snow;
+            }
+        });
+    */
+    property particleOptions(v)
+    {
+        get {
+            return this._particleOptions;
+        }
+        set {
+            assert typeof v == #object;
+            this._particleOptions = v;
+        }
+    }
+
 
     /**
     Time of the particle's existence in milliseconds, default is set to -1 (forever);
@@ -139,7 +176,7 @@ class Emitter : BaseClass
     }
 
     /**
-    Spread angle definition. Default is set to Math.PI / 32
+    Spread angle definition. Default is set to Math.PI / 32, whole circle is 2*Math.PI
     @property spread
     @type Float
     @example
@@ -160,7 +197,24 @@ class Emitter : BaseClass
     }
 
     /**
-    Defines emission rate, default is set to 4. Emision rate is number of particles emited during one call of {{#crossLink "Emitter.process"}}{{/crossLink}} method.
+    Number of emision in one second. Default is 40
+    @property stepsPerSeconds
+    @type Integer
+    */
+    property stepsPerSeconds(v)
+    {
+        get {
+            return this._stepsPerSeconds;
+        }
+        set {
+            assert v instanceof Integer;
+            this._stepsPerSeconds = v;
+        }
+    }
+
+
+    /**
+    Number of particles emitted in one second. Default is 40.
     @type Integer
     @property emissionRate
     @example
@@ -200,12 +254,6 @@ class Emitter : BaseClass
     Number of particles
     @property count
     @type Integer
-    @example
-        //process emitters
-        for (var emitter in emitters) {
-            emitter.process(fields);
-            console<<"current count of particles "<<emitter.count<<"\n";
-        }
     */
     property count(v)
     {
@@ -219,37 +267,36 @@ class Emitter : BaseClass
     @property particleClass
     @type Class
     @example
-        // custom paricle class
-        class MyParticle : Particle
+        //class CustomParticle - used by comet effect emitter
+        class CustomParticle : Particle
         {
             // static variables
             // static paint used by all instances to draw bitmap
-            var paint = null;
-            // static bitmap used by all instances
-            var img = Bitmap.fromFile("app://fire.png");
         
             function init()
             {
                 super.init();
         
-                ...
+                // create paint used to bitmap effect
+                this._paint = new Paint();
+                this._paint.alpha = 80;
+        
+                // create animator
+                var animator = new Animator({
+                    transition: Animator.Transition.easeIn,     // start up slowly and then quickly speed up at the end of the animation
+                    duration: 1100,                              // length of animation in miliseconds
+                }); 
+                animator.addSubject(function(state) {           // state starts from 1.0 to 0.0
+                    this super._paint.alpha = 255-(state*255).toInteger();
+                }); 
+                animator.play();
             }
         
-            // owerwrite ancestor's draw function
             function draw(canvas)
             {
-                // set bitmap translate acording to actual particle position
-                this._matrix.translateX = this._position.x;
-                this._matrix.translateY = this._position.y;
-                // draw custom particle bitmap
-                canvas.drawBitmapMatrix(MyParticle.img, this._matrix, MyParticle.paint);
+                canvas.drawBitmap(GFX.star, (this.x).toInteger() - GFX.star.width / 2, (this.y).toInteger() - GFX.star.height / 2, this._paint);
             }
         }
-        ...
-        new Emitter({
-           ...
-           particleClass   : MyParticle
-        })
     */
     property particleClass(v)
     {
@@ -263,33 +310,96 @@ class Emitter : BaseClass
     }
 
     /**
-    Move emiter to new position.
-    @method moveTo
-    @param point {Vector} position of emitter
+    Angle of the emited particles.
+    @property angle
+    @type Float
     */
-    function moveTo(point)
+    property angle (v)
     {
-        this._position = point;
+        get {
+            return this._angle;
+        }
+        set {
+            assert typeof v == #float;
+            this._angle  = v;
+        }
     }
 
     /**
+    Array of force fialds affecting particle movement.
+    @property fields
+    @type Array
+    */
+    property fields(v)
+    {
+        get return this._fields;
+        set {
+            assert typeof v == #array;
+            this._fields = v;
+        }
+    }
+
+    /**
+    Move emiter to new position.
+    @method moveTo
+    @param x {Integer} horizontal position of emitter
+    @param y {Integer} vertical position of emitter
+    */
+    function moveTo(x, y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    /**
+    Start emition
+    @method start
+    */
+    function start()
+    {
+        this._timer.start();
+    }
+
+    /**
+    Stop emition
+    @method start
+    */
+    function stop()
+    {
+        this._timer.stop();
+    }
+
+    /**
+    Stop emitter and release all resources.
+    @method start
+    */
+    function dispose()
+    {
+        this._timer.dispose();
+    }
+
+    /*
     Method to add particle. Options adjust the particle.
     This method is usually called automatically from {{#crossLink "Emitter.process"}}{{/crossLink}} method.
     @param options {Object}
     @method addParticle
     @protected
     */
-    function addParticle(options = null)
+    function _addParticle(options = null)
     {
         if (this._maxParticles > 0 && this._particles.length >= this._maxParticles)
             return;
         var self = this;
-        var template = options ? options.clone() : {};
-        template.position = template.position || self._position.copy();
-        template.velocity = template.velocity || Vector.fromAngle(self._velocity.getAngle() + self._spread - ((rand(100000) /100000.0) * self._spread * 2), self._velocity.getMagnitude());
-        template.ttl = template.ttl || self._particleLife;
+
         var clazz = this.particleClass;
-        var particle = new clazz(template);
+        var particle = new clazz(this._particleOptions);
+        particle.x = this.x * 1.0;
+        particle.y = this.y * 1.0;
+
+        var angle = this._angle + rand((this._spread*1000).toInteger())*1.0/1000 - this._spread / 2;
+        
+        particle.vx = this.speed * Math.cos(angle);
+        particle.vy = this.speed * Math.sin(angle);
         this._particles.push(particle);
         if (typeof this.particleCreated == #function)
             this.particleCreated.call(this, particle);
@@ -297,8 +407,7 @@ class Emitter : BaseClass
     }
 
     /**
-    Method draw defines action whithin onDraw.
-        It draws all particles from this emitter. Is is usally no need to overweite this method.
+    Method draw defines action whithin onDraw.  It draws all particles from this emitter. Is is usally no need to overweite this method.
     @param canvas {Canvas} Current game canvas
     @method draw
     @protected
@@ -314,33 +423,40 @@ class Emitter : BaseClass
 
     /**
     Process method makes time step for emitter. It creates new particles and destroys old particles.
-    @method process
-    @param fields {Array} Array of fields.
+    @method _timeStep
     */
-    function process(fields = null)
+    function _timeStep()
     {
         var particle;
-        var death = [];
         for (particle in this._particles) {
-            if (!particle.alive())
-                death.push(particle);
-            else {
-                if (fields != null && fields.length > 0)
-                    particle.submitToFields(fields);
-                particle.move();
+            if (this._particleLife != -1 && particle._age > this._particleLife) {
+                this._particles.removeByValue(particle);
+                if (typeof this.particleDestroyed == #function)
+                    this.particleDestroyed.call(this, particle);
+            } else {
+                if (this._fields != null && this._fields.length > 0)
+                    particle.move(1000 / this._stepsPerSeconds, this._fields);
+                else
+                    particle.move(1000 / this._stepsPerSeconds);
             }
         }
-        for (particle in death) {
-            this._particles.removeByValue(particle);
-            if (typeof this.particleDestroyed == #function)
-                this.particleDestroyed.call(this, particle);
+
+        var number = this._emissionRate * 1.0 / this._stepsPerSeconds;
+        if (number > 0.9)
+            for (var i = 0; i < (number).toInteger(); i++)
+                this._addParticle();
+        else {
+            this._i += number;
+            if (this._i > 1.0) {
+                this._addParticle();
+                this._i = 0.0;
+            }
+
         }
-        for (var i = 0; i < this.emissionRate; i++)
-            this.addParticle();
     }
 
-
-    /**
+// @region events
+    /*
     Event onParticleCreated, defines action after particle is created
     @event onParticleCreated
     @param particle {Object} new particle
@@ -359,7 +475,7 @@ class Emitter : BaseClass
           console<<"New particle created "<<particle<<"\n";
         }
     */
-    property onParticleCreated(v)
+  /*  property onParticleCreated(v)
     {
         get return this.particleCreated;
         set {
@@ -368,9 +484,9 @@ class Emitter : BaseClass
                 throw new InvalidArgument("[Emitter.onParticleCreated] Expects type of function");
              this.particleCreated = v;
         }
-    }
+    }*/
 
-    /**
+    /*
     Event onParticleDestroyed, defines action after particle is destroyed
     @event onParticleDestroyed
     @param particle {Object} destroyed particle
@@ -389,7 +505,7 @@ class Emitter : BaseClass
             console<<"A particle destroyed "<<particle<<"\n";
         }
     */
-    property onParticleDestroyed(v)
+    /*property onParticleDestroyed(v)
     {
         get return this.particleDestroyed;
         set {
@@ -398,5 +514,6 @@ class Emitter : BaseClass
                 throw new InvalidArgument("[Emitter.onParticleDestroyed] Expects type of function");
              this.particleDestroyed = v;
         }
-    }
+    }*/
+// @endregion
 }

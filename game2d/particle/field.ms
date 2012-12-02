@@ -1,19 +1,18 @@
 include "lib://core/baseClass.ms"
 
 /**
-Fields class represents force field, which affects velocity of particles. An instance of this class is set to {{#crossLink "Emitter.process"}}{{/crossLink}} method.
+Field class represents force field, which affects velocity of particles. An instance of this class is set to {{#crossLink "Emitter.process"}}{{/crossLink}} method.
 @module game2d
 @class Fields
 @example
-    function process()
-    {
-        var emitters = this._emitters;
-        var fields = this._fields;
-        
-        //process emitters
-        for (var emitter in emitters)
-            emitter.process(fields);
-    }
+    this._emitter = new LineEmitter ({
+        fields : [
+            new Field({
+                x : System.width / 2,
+                ...
+            })
+        ]
+    });
 */
 class Field : BaseClass
 {
@@ -25,57 +24,62 @@ class Field : BaseClass
     function init()
     {
         super.init();
-        this._position  = this.options.position || new Vector({x:0, y:0});
-        this._size      = this.options.size || 8;
-        this._mass      = this.options.mass || 100;
-    }
-
-   /**
-    Location of the field center in pixels.
-    @property position
-    @type Vector
-    @example
-        new Field ({
-            position    : new Vector({x:System.width/2, y:System.height/2}),
-            mass        : 250
-        })
-   */
-   property position(v)
-    {
-        get {
-            return this._position;
-        }
-        set {
-            assert v instanceof Vector;
-            this._position = v;
-        }
+        this._x         = this.options.x || 0;
+        this._y         = this.options.y || 0;
+        this._mass      = this.options.mass || 1;
+        this._g         = this.options.mass || 10.0;                  // gravity constant
     }
 
     /**
-    Defines how large the field size is for dynamics computations.
-    Default is set to 8.
-    @property size
+    Horizontal position of the emiter in pixels
+    @property x
     @type Integer
+    @example
+        new Field({
+            x : System.width / 2,
+            ...
+        })
     */
-    property size(v)
+    property x(v)
     {
         get {
-            return this._size;
+            return this._x;
         }
         set {
-            assert typeof v == #integer;
-            this._size = v;
+            assert v instanceof Integer;
+            this._x = v;
         }
     }
 
     /**
-    The mass of the field. Default is set to 100.
+    Vertical position of the emiter in pixels
+    @property y
+    @type Integer
+    @example
+        new Field({
+            y : System.height / 2,
+            ...
+        })
+    */
+    property y(v)
+    {
+        get {
+            return this._y;
+        }
+        set {
+            assert v instanceof Integer;
+            this._y = v;
+        }
+    }
+
+    /**
+    The mass of the field in kg. Default is set to 1 kg.
     @property mass
     @type Integer
     @example
-        new Field ({
-            position    : new Vector({x:System.width/2, y:System.height/2}),
-            mass        : 250
+        new Field({
+            mass : 10,
+            ...
         })
     */
     property mass(v)
@@ -90,12 +94,52 @@ class Field : BaseClass
     }
 
     /**
+    Gravity koeficient used to calculate the force. Default is 10.0
+    @property g
+    @type Float
+    @example
+        new Field ({
+            g : 9.81,
+        })
+    */
+    property g(v)
+    {
+        get {
+            return this._g;
+        }
+        set {
+            assert v instanceof Float;
+            this._g = v;
+        }
+    }
+
+    /**
     Move field onto a new positoin.
     @method moveTo
-    @param point {Vector} X and y coordinates of new field position
+    @param x
+    @param y
     */
-    function moveTo(point)
+    function moveTo(x, y)
     {
-        this._position = point;
+        this._x = x;
+        this._y = y;
+    }
+
+    /**
+    Calculate force affecting the particle in a point in the fild
+    @param x horizontal position of the particle
+    @param y vertical position of the particle
+    */
+    function getForce(x, y)
+    {
+        var distance = Math.sqrt((this._x - x)*(this._x - x) + (this._y - y)*(this._y - y));  //c^2 = x^2 + y^2
+
+        if (distance == 0.0)
+            distance = 0.0001;
+
+        var fy = -1*this._g*this._mass/distance*((y - this._y));      //
+        var fx = -1*this._g*this._mass/distance*((x - this._x));      //
+
+        return (fx, fy);
     }
 }
