@@ -42,4 +42,22 @@ class PaintCache
         PaintCache._storage[key] = obj;
     }
 
+    // fix names
+
+    function hasDrawing(key)
+    {
+        return this.hasPaint(key);
+    }
+
+    function getDrawing(key)
+    {
+        return this.getPaint(key);
+        //throw new Exception("[PaintCache.getPaint] undefined key:" + key);
+    }
+
+    function storeDrawing(key, obj)
+    {
+        this.storePaint(key, obj);
+    }
+
 }
