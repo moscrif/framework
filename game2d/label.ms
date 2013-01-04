@@ -155,7 +155,7 @@ class Label : GameObject
         }
     }
 
-    /*
+    /**
     This property allows to change text's alpha level.
     @property alpha
     @type Integer
